@@ -1,10 +1,12 @@
 "use client"
 import React, { useState } from "react";
+import{ useRouter } from "next/navigation";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,7 +16,7 @@ const LoginScreen = () => {
     }
     setError("");
     // Replace with your authentication logic
-    alert(`Logged in as ${email}`);
+ router.push("/pages/users"); // Redirect to cars page on successful login
   };
 
   return (
