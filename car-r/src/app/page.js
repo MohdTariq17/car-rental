@@ -16,7 +16,7 @@ const LoginScreen = () => {
     }
     setError("");
     // Replace with your authentication logic
- router.push("/pages/users"); // Redirect to cars page on successful login
+ router.push("/pages/cars"); // Redirect to cars page on successful login
   };
 
   return (
