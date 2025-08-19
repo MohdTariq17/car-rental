@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "next": "^15.4.6",
+    "primeflex": "^4.0.0",
+    "primeicons": "^7.0.0",
+    "primereact": "^10.9.7",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
