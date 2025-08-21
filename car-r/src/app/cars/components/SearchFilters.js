@@ -96,7 +96,12 @@ const SearchFilters = ({ filters, onFiltersChange }) => {
         <div className="active-filters">
           {filters.searchTerm && (
             <span className="filter-tag">
-              Search: "{filters.searchTerm}"
+
+              // ✅ AFTER (Using HTML entities)
+<div>Search: &quot;{filters.searchTerm}&quot;</div>
+
+
+
               <button onClick={() => handleFilterChange('searchTerm', '')}>×</button>
             </span>
           )}

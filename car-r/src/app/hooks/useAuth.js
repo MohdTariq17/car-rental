@@ -80,28 +80,30 @@ export const useAuth = () => {
   /**
    * Update session expiry time
    */
-  const updateSessionTimer = useCallback(() => {
-    if (authState.isAuthenticated) {
-      const timeLeft = getTimeUntilExpiry();
-      
-      setAuthState(prev => ({
-        ...prev,
-        timeUntilExpiry: timeLeft
-      }));
+  // ✅ AFTER (Added handleLogout dependency)
+const updateSessionTimer = useCallback(() => {
+  if (authState.isAuthenticated) {
+    const timeLeft = getTimeUntilExpiry();
+    
+    setAuthState(prev => ({
+      ...prev,
+      timeUntilExpiry: timeLeft
+    }));
 
-      // Show warning if session is about to expire (5 minutes)
-      const warningThreshold = 5 * 60 * 1000; // 5 minutes
-      if (timeLeft <= warningThreshold && timeLeft > 0 && !sessionWarning) {
-        setSessionWarning(true);
-        console.warn('⚠️  Session expiring soon:', Math.floor(timeLeft / 1000 / 60), 'minutes');
-      }
-
-      // Auto-logout if session expired
-      if (timeLeft <= 0) {
-        handleLogout('Session expired');
-      }
+    // Show warning if session is about to expire (5 minutes)
+    const warningThreshold = 5 * 60 * 1000; // 5 minutes
+    if (timeLeft <= warningThreshold && timeLeft > 0 && !sessionWarning) {
+      setSessionWarning(true);
+      console.warn('⚠️  Session expiring soon:', Math.floor(timeLeft / 1000 / 60), 'minutes');
     }
-  }, [authState.isAuthenticated, sessionWarning]);
+
+    // Auto-logout if session expired
+    if (timeLeft <= 0) {
+      handleLogout('Session expired'); // ← This uses handleLogout
+    }
+  }
+}, [authState.isAuthenticated, sessionWarning, handleLogout]); // ← Added handleLogout
+
 
   /**
    * Handle logout

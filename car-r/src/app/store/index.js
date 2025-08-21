@@ -163,11 +163,13 @@ export const storeUtils = {
 };
 
 // Development helpers
-if (process.env.NODE_ENV === 'development') {
-  // Make store available globally for debugging
+// Development helpers
+if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
+  // Make store available globally for debugging (client-side only)
   window.carRentalStore = useAppStore;
   window.storeUtils = storeUtils;
   
   console.log('🏪 CarRental Store initialized with debugging tools');
   console.log('Access via: window.carRentalStore.getState()');
 }
+

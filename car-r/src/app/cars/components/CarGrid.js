@@ -160,10 +160,11 @@ const CarGrid = ({ filters, onBookCar }) => {
   ];
 
   // Filter and sort cars based on current filters
-  const filteredCars = useMemo(() => {
-    let filtered = allCars.filter(car => {
-      // Search term filter
-      if (filters.searchTerm) {
+  // ✅ AFTER (Fixed)
+const filteredCars = useMemo(() => {
+  return allCars.filter(car => {
+    // Search term filter
+    if (filters.searchTerm) {
         const searchLower = filters.searchTerm.toLowerCase();
         if (!car.name.toLowerCase().includes(searchLower) && 
             !car.brand.toLowerCase().includes(searchLower)) {

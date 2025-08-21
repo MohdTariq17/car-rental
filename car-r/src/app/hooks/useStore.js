@@ -8,12 +8,9 @@ import { useAppStore } from '../store/index.js';
  * with optional selectors for performance optimization
  */
 
-export const useStore = (selector = null) => {
-  if (selector) {
-    return useAppStore(selector);
-  }
-  
-  return useAppStore();
+// ✅ Fixed: Always calls useAppStore hook
+export const useStore = (selector) => {
+  return useAppStore(selector || ((state) => state));
 };
 
 // Specific store slice hooks for better performance

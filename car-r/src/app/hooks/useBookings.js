@@ -15,21 +15,19 @@ export const useBookings = () => {
   const authStore = useAuthStore();
 
   // Computed values
-  const filteredBookings = useMemo(() => {
-    return bookingStore.getFilteredBookings();
-  }, [bookingStore.bookings, bookingStore.bookingFilters]);
+  // ✅ AFTER (Fixed)
+const filteredBookings = useMemo(() => {
+  return bookingStore.getFilteredBookings();
+}, [bookingStore.bookings, bookingStore.bookingFilters, bookingStore]); // Added bookingStore
 
-  const bookingStats = useMemo(() => {
-    return bookingStore.getBookingStats();
-  }, [bookingStore.bookings]);
+const bookingStats = useMemo(() => {
+  return bookingStore.getBookingStats();
+}, [bookingStore.bookings, bookingStore]); // Added bookingStore
 
-  const userBookings = useMemo(() => {
-    if (!authStore.currentUser) return [];
-    return bookingStore.getBookingsByUser(
-      authStore.currentUser.id,
-      authStore.userRole
-    );
-  }, [bookingStore.bookings, authStore.currentUser, authStore.userRole]);
+const userBookings = useMemo(() => {
+  return bookingStore.getBookingsByUser();
+}, [bookingStore.bookings, authStore.currentUser, bookingStore]); // Added bookingStore
+
 
   const upcomingBookings = useMemo(() => {
     const now = new Date();

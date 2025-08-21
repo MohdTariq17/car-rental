@@ -13,13 +13,13 @@ export const useCarData = () => {
   const carStore = useCarStore();
 
   // Computed values
-  const filteredCars = useMemo(() => {
-    return carStore.getFilteredCars();
-  }, [carStore.cars, carStore.carFilters]);
+ const filteredCars = useMemo(() => {
+  return carStore.getFilteredCars();
+}, [carStore.cars, carStore.carFilters, carStore]); // Added carStore
 
   const carStats = useMemo(() => {
-    return carStore.getCarStats();
-  }, [carStore.cars]);
+  return carStore.getCarStats();
+}, [carStore.cars, carStore]); // Added carStore
 
   const availableCars = useMemo(() => {
     return carStore.cars.filter(car => car.available);
@@ -226,13 +226,13 @@ export const useCarData = () => {
 
   // Advanced filtering with real-time updates
   const setAdvancedFilters = useCallback((filters) => {
-    carStore.updateCarFilters(filters);
-  }, [carStore.updateCarFilters]);
+  carStore.updateCarFilters(filters);
+}, [carStore.updateCarFilters, carStore]); // Added carStore
 
   // Reset all filters
   const clearAllFilters = useCallback(() => {
-    carStore.resetCarFilters();
-  }, [carStore.resetCarFilters]);
+  carStore.resetCarFilters();
+}, [carStore.resetCarFilters, carStore]); // Added carStore
 
   return {
     // Data
