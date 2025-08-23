@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import CustomerHeader from './components/CustomerHeader.js';
@@ -20,30 +20,63 @@ const CustomerDashboard = () => {
     location: 'all',
     sortBy: 'featured'
   });
+  const [customerData, setCustomerData] = useState({
+    name: 'John Customer',
+    email: 'customer@example.com',
+    memberSince: 2023,
+    totalTrips: 15,
+    rating: 4.9,
+    currentBooking: {
+      carName: 'BMW X5 2023',
+      pickupDate: '2025-08-25',
+      returnDate: '2025-08-28',
+      location: 'Downtown'
+    },
+    recentTrips: [
+      { id: 1, car: 'Tesla Model 3', date: '2025-08-15', rating: 5 },
+      { id: 2, car: 'Honda Civic', date: '2025-08-10', rating: 4 },
+      { id: 3, car: 'BMW X3', date: '2025-08-05', rating: 5 }
+    ]
+  });
+
   const router = useRouter();
 
-  // Check authentication on component mount
+  // ✅ FIXED: Check authentication safely with useEffect
   useEffect(() => {
     const checkAuth = () => {
-      const isLoggedIn = localStorage.getItem('isLoggedIn');
-      const role = localStorage.getItem('userRole');
-      
-      if (!isLoggedIn || role !== 'customer') {
-        router.push('/');
-        return;
+      // Safe localStorage access only in browser
+      if (typeof window !== 'undefined') {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        const role = localStorage.getItem('userRole');
+        const userIdentifier = localStorage.getItem('userIdentifier');
+
+        if (!isLoggedIn || role !== 'customer') {
+          router.push('/');
+          return;
+        }
+
+        // Update customer data with stored user info
+        if (userIdentifier) {
+          setCustomerData(prev => ({
+            ...prev,
+            email: userIdentifier,
+            name: userIdentifier.split('@')[0] || 'Customer'
+          }));
+        }
       }
-      
       setLoading(false);
     };
 
     checkAuth();
   }, [router]);
 
-  // Handle logout
+  // ✅ FIXED: Handle logout safely
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userIdentifier');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('userIdentifier');
+    }
     router.push('/');
   };
 
@@ -61,26 +94,7 @@ const CustomerDashboard = () => {
     // Here you would typically save the booking
   };
 
-  // Mock customer data
-  const customerData = {
-    name: 'John Customer',
-    email: localStorage.getItem('userIdentifier') || 'customer@example.com',
-    memberSince: '2023',
-    totalTrips: 15,
-    rating: 4.9,
-    currentBooking: {
-      carName: 'BMW X5 2023',
-      pickupDate: '2025-08-25',
-      returnDate: '2025-08-28',
-      location: 'Downtown'
-    },
-    recentTrips: [
-      { id: 1, car: 'Tesla Model 3', date: '2025-08-15', rating: 5 },
-      { id: 2, car: 'Honda Civic', date: '2025-08-10', rating: 4 },
-      { id: 3, car: 'BMW X3', date: '2025-08-05', rating: 5 }
-    ]
-  };
-
+  // Show loading state while checking authentication
   if (loading) {
     return (
       <div className="loading-container">
@@ -130,7 +144,7 @@ const CustomerDashboard = () => {
               </div>
             </section>
 
-            {/* Search & Filters */}
+            {/* Search Filters */}
             <SearchFilters 
               filters={searchFilters}
               onFiltersChange={setSearchFilters}
@@ -147,7 +161,7 @@ const CustomerDashboard = () => {
 
       {/* Booking Modal */}
       {showBookingModal && selectedCar && (
-        <BookingModal
+        <BookingModal 
           car={selectedCar}
           onConfirm={handleConfirmBooking}
           onClose={() => {
@@ -160,9 +174,9 @@ const CustomerDashboard = () => {
       {/* Overlay for mobile profile */}
       {showProfile && (
         <div 
-          className="profile-overlay"
+          className="profile-overlay" 
           onClick={() => setShowProfile(false)}
-        />
+        ></div>
       )}
     </div>
   );
