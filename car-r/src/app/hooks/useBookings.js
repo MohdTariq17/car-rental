@@ -16,17 +16,19 @@ export const useBookings = () => {
 
   // Computed values
   // ✅ AFTER (Fixed)
+    // ✅ AFTER (Only necessary dependencies)
 const filteredBookings = useMemo(() => {
   return bookingStore.getFilteredBookings();
-}, [bookingStore.bookings, bookingStore.bookingFilters, bookingStore]); // Added bookingStore
+}, [bookingStore]); // Only store needed
 
 const bookingStats = useMemo(() => {
   return bookingStore.getBookingStats();
-}, [bookingStore.bookings, bookingStore]); // Added bookingStore
+}, [bookingStore]); // Only store needed
 
 const userBookings = useMemo(() => {
   return bookingStore.getBookingsByUser();
-}, [bookingStore.bookings, authStore.currentUser, bookingStore]); // Added bookingStore
+}, [bookingStore]); // Only store needed
+
 
 
   const upcomingBookings = useMemo(() => {

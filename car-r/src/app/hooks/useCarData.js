@@ -15,11 +15,11 @@ export const useCarData = () => {
   // Computed values
  const filteredCars = useMemo(() => {
   return carStore.getFilteredCars();
-}, [carStore.cars, carStore.carFilters, carStore]); // Added carStore
+}, [carStore]); // Only carStore needed
 
   const carStats = useMemo(() => {
   return carStore.getCarStats();
-}, [carStore.cars, carStore]); // Added carStore
+}, [carStore]); // Only carStore needed
 
   const availableCars = useMemo(() => {
     return carStore.cars.filter(car => car.available);
@@ -225,14 +225,16 @@ export const useCarData = () => {
   }, [carStore.cars]);
 
   // Advanced filtering with real-time updates
-  const setAdvancedFilters = useCallback((filters) => {
+  
+  // ✅ AFTER (only necessary dependency)
+const setAdvancedFilters = useCallback((filters) => {
   carStore.updateCarFilters(filters);
-}, [carStore.updateCarFilters, carStore]); // Added carStore
+}, [carStore]); // Only carStore needed
 
   // Reset all filters
   const clearAllFilters = useCallback(() => {
   carStore.resetCarFilters();
-}, [carStore.resetCarFilters, carStore]); // Added carStore
+}, [carStore]); // Only carStore needed
 
   return {
     // Data
